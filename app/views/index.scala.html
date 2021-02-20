@@ -1,0 +1,21 @@
+@(name: String)(logstate: String)
+
+@main("Squaddle") {
+
+  <a href="@routes.HomeController.account()">My account</a><br />
+  <a href="@routes.HomeController.logout()">logout</a>
+
+  <h1>It's Squaddle</h1>
+  <h3>Welcome @name</h3>
+  <p>
+  	<form action="/postpost">
+  		Talk to the people. <br />
+  		<input type="text" id="text" name="text">
+  		<input type="submit" value="Post">
+  	</form>
+  	
+  </p>
+  <p>
+  	Here's the feed [TODO]. You can <a href="#">invite [TODO]</a>.
+  </p>
+} 
