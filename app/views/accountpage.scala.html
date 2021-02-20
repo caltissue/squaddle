@@ -1,8 +1,24 @@
 @(user: Array[String])
 
 @main("Account") {
-	<h2>Your Account</h2>
-	<p>Here is your account info.</p>
-	<p>Email: @user(1)</p>
-	<a href="/">back</a>
+<div class="container">
+	<div class="nav">
+		<a href="/">back</a>
+	</div>
+	
+	<div class="header">
+		<h2>Your Account</h2>
+		<p>Here is your account info.</p>
+	</div>
+
+	<div>
+		<ul style="list-style-type:none;">
+			<div style="width: 80%; max-width: 500px;">
+				<li>
+					<p>Email: @user(1)</p>
+				</li>
+			</div>
+		</ul>
+	</div>
+</div>
 }

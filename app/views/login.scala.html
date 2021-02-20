@@ -1,17 +1,27 @@
 @(message: String)
 
 @main("Log In"){
-	<h1>Welcome to Squaddle</h1>
-	<h3>Log In</h3>
+<div class="container">
+	<div class="header">
+		<h1>Welcome to Squaddle</h1>
+		<h3>Log In</h3>
 
-	<form action="/loggingin">
-		<label for="name">Email: </label>
-		<input type="text" id="name" name="name" required="required">
+		<div class="postform">
+			<form action="/loggingin">
+				<label for="name">Email</label>
+				<input type="text" id="name" name="name" required="required">
 
-		<label for="pw">Password: </label>
-		<input type="password" id="pw" name="pw" required="required">
+				<br />
 
-		<input type="submit" value="Log In">
-	</form>
-	<h4>@message</h4>
+				<label for="pw">Password</label>
+				<input type="password" id="pw" name="pw" required="required">
+
+				<br />
+
+				<input type="submit" value="Log In">
+			</form>
+			<h4>@message</h4>
+		</div>
+	</div>
+</div>
 }
