@@ -1,4 +1,6 @@
-@(name: String)(logstate: String)
+@(name: String, logstate: String, posts: List[classes.Post])
+
+@import classes.Post
 
 @main("Squaddle") {
 
@@ -13,9 +15,19 @@
   		<input type="text" id="text" name="text">
   		<input type="submit" value="Post">
   	</form>
+
+  	<h4>@logstate</h4>
   	
   </p>
-  <p>
-  	Here's the feed [TODO]. You can <a href="#">invite [TODO]</a>.
-  </p>
+  <ul style="list-style-type:none;">
+  	@for(post <- posts) {
+  	<div style="border-top:solid 1px black; width: 80%; max-width: 500px;">
+	  	<li>
+	  		<p>@post.getUser().getEmail() posted:</p>
+	  		<p>@post.getText()</p>
+	  		<p>@post.getDate().toString()</p>
+	  	</li>
+  	</div>
+  }
+  </ul>
 } 

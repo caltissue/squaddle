@@ -1,10 +1,9 @@
 package controllers;
 
 import play.mvc.*;
-import java.util.Optional;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import classes.*;
+import java.io.*;
 
 public class HomeController extends Controller {
 
@@ -12,9 +11,14 @@ public class HomeController extends Controller {
     	Optional<String> emailOpt = request.session().get("email");
     	String email = emailOpt.isPresent() ? emailOpt.get() : ""; 
 
-    	if (email.length() > 0) 
-    		// get all posts & pass as context
-    		return ok(views.html.index.render(email,""));
+    	Optional<String> message = request.session().get("logstate");
+    	String msg = message.isPresent() ? message.get() : "";
+
+    	if (email.length() > 0) {
+    		ArrayList<Post> allPosts = IOdevice.getEveryPost();
+
+    		return ok(views.html.index.render(email, msg, allPosts));
+    	}
     	else
     		return ok(views.html.login.render(""));
     }
@@ -35,9 +39,7 @@ public class HomeController extends Controller {
     }
 
     public Result home(Http.Request request) {
-    	Optional<String> email = request.session().get("email");
-    	String nameString = email.isPresent() ? email.get() : ""; 
-    	return ok(views.html.index.render(nameString, "logout"));
+    	return redirect("/");
     }
 
     public Result logout() {
@@ -63,8 +65,12 @@ public class HomeController extends Controller {
 
     	Post post = new Post(text, date, user);
     	HashMap<String, String> saveObject = post.getSaveObject();
-    	// serialize it to file
+    	
+    	boolean objectSaved = IOdevice.savePost(saveObject);
 
-    	return redirect("/");
+    	if(objectSaved)
+			return redirect("/").addingToSession(request, "logstate", "Success");
+		else
+			return redirect("/").addingToSession(request, "logstate", "Sorry, something went wrong");
     }
 }

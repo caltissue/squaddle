@@ -8,6 +8,12 @@ public class Post {
 	private Date date;
 	private User user;
 
+	public Post() {
+		text = "";
+		date = null;
+		user = null;
+	}
+
 	public Post(String text, Date date, User user) {
 		this.text = text;
 		this.date = date;
