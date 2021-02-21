@@ -5,10 +5,14 @@ import java.io.*;
 
 public class IOdevice {
 
-	private static String filepath = "/Users/cal/Desktop/squad-online/squad-online/";
+	private static final String filepath = "/Users/cal/Desktop/squad-online/squad-online/";
+	private static final String pathToPosts = "_posts/post-";
+	private static final String pathToUsers = "_accounts/user-";
 
-	public static boolean savePost(HashMap<String, String> data) {
-		String filename = filepath + "_posts/p-" + data.get("date") + ".ser";
+	public static String getUserPath() { return pathToUsers; }
+
+	public static boolean savePost(HashMap<String, String> data) { // TODO: this is now redundant
+		String filename = filepath + pathToPosts + data.get("id");
 
 		try {
 			FileOutputStream fileOut = new FileOutputStream(filename);
@@ -23,6 +27,40 @@ public class IOdevice {
 
 		return true;
 	}
+
+	public static void save(HashMap<String, String> data, String filename) { // TODO: make a boolean method
+		String fullFilename = filepath + filename;
+
+		try {
+			FileOutputStream fileOut = new FileOutputStream(fullFilename);
+			ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+			objOut.writeObject(data);
+			objOut.close();
+			fileOut.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			//return false;
+		}
+		//return true;
+	}
+
+	public static HashMap<String, String> load(String filename) {
+		String fullFilename = filepath + filename;
+		HashMap<String, String> data = new HashMap<>();
+
+		try {
+			FileInputStream fileIn = new FileInputStream(fullFilename);
+			ObjectInputStream objIn = new ObjectInputStream(fileIn);
+			data = (HashMap) objIn.readObject();
+			objIn.close();
+			fileIn.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return data;
+	}
+
 
 	public static Post getPost(String filename) {
 		String fullname = filepath + "_posts/" + filename;
@@ -50,7 +88,6 @@ public class IOdevice {
 		try {
 			File dir = new File(filepath + "_posts");
 			dir.createNewFile();
-
 			File[] files = dir.listFiles();
 			if (files == null) files = new File[] {};
 
@@ -74,7 +111,33 @@ public class IOdevice {
 		return posts;
 	}
 
-	public static ArrayList<Post> getNumberOfPosts(int number) {
+	public static ArrayList<String> getEveryPostFilename() {
+		ArrayList<String> filenames = new ArrayList<>();
+
+		try {
+			File dir = new File(filepath + "_posts"); // should these 4 lines be a helper method?
+			dir.createNewFile();
+			File[] files = dir.listFiles();
+			if (files == null) files = new File[] {};
+
+			for (File f : files) {
+				String filename = f.getName();
+				filenames.add(filename);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return filenames;
+	}
+
+	public static void deletePostFile(int id) {
+		String filename = filepath + pathToPosts + new Integer(id).toString();
+		File f = new File(filename);
+		f.delete();
+	}
+
+	public static ArrayList<Post> getANumberOfPosts(int number) {
 		// getEveryPost but for a given number
 		return new ArrayList<Post>();
 	}

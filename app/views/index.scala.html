@@ -32,8 +32,15 @@
 			<div style="width: 80%; max-width: 500px; margin-top: 40px;">
 				<li>
 					<p>
-						<span class="headline">@post.getUser().getEmail()</span>
+						<span class="headline">@post.getUser().getDisplayName()</span>
 						<small>@post.getDate().toString()</small>
+
+						@* 
+							TODO: this condition should be id against id 
+						*@
+						@if(name == post.getUser().getDisplayName()) {
+							<a href="/deletepost/@post.getId()"><small>delete</small></a>
+						}
 					</p>
 					<p>@post.getText()</p>
 				</li>
