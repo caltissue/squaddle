@@ -17,7 +17,8 @@ public class HomeController extends Controller {
     	if (email.length() > 0) {
     		ArrayList<Post> allPosts = IOdevice.getEveryPost();
 
-    		return ok(views.html.index.render(email, msg, allPosts));
+    		return ok(views.html.index.render(email, msg, allPosts))
+    			.removingFromSession(request, "logstate");
     	}
     	else
     		return ok(views.html.login.render(""));
@@ -26,7 +27,7 @@ public class HomeController extends Controller {
     public Result login(Http.Request request) {
     	Optional<String> messageOpt = request.session().get("message");
     	String message = messageOpt.isPresent() ? messageOpt.get() : "";
-    	return ok(views.html.login.render(message));
+    	return ok(views.html.login.render(message)).removingFromSession(request, "message");
     }
 
     public Result loggingin(Http.Request request, String email, String pw) {
