@@ -4,6 +4,8 @@ import play.mvc.*;
 import java.util.*;
 import classes.*;
 import java.io.*;
+import play.libs.Json;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class HomeController extends Controller {
 
@@ -15,7 +17,7 @@ public class HomeController extends Controller {
     	String msg = message.isPresent() ? message.get() : "";
 
     	if (idString != null && idString != "") {
-    		ArrayList<Post> allPosts = IOdevice.getEveryPost();
+    		ArrayList<Post> allPosts = Post.getAll();
     		User user = User.getById(Integer.parseInt(idString));
 
     		return ok(views.html.index.render(user.getDisplayName(), msg, allPosts))
@@ -34,7 +36,7 @@ public class HomeController extends Controller {
     public Result loggingin(Http.Request request, String email, String pw) {
     	User userAttempt = User.getByEmail(email);
 
-    	if (userAttempt.getId() != 0 && pw.equals(userAttempt.getPassword())) 
+    	if (User.isValid(userAttempt, pw)) 
     		return redirect("/").addingToSession(request, "user_id", new Integer(userAttempt.getId()).toString());
     	else 
     		return redirect("/login").addingToSession(request, "message", "bad login attempt");
@@ -48,8 +50,8 @@ public class HomeController extends Controller {
     	Optional<String> idO = request.session().get("user_id"); // TODO: if no id, problem occured
     	String id = idO.isPresent() ? idO.get() : "";
     	User user = User.getById(Integer.parseInt(id));
-    	User.save(user);
-    	String[] userInfo = user.getStringArray();
+    	//User.save(user);
+    	String[] userInfo = new String[] { user.getEmail(), user.getDisplayName() };
     	return ok(views.html.accountpage.render(userInfo));
     }
 
@@ -60,21 +62,16 @@ public class HomeController extends Controller {
 
     	Date date = new Date(System.currentTimeMillis());
 
-    	int id = Post.getNewId();
+    	int id = Post.getNewId(); // TODO: poor concern sep. Controller shouldn't know about post id.
 
     	Post post = new Post(id, text, date, user);
-    	HashMap<String, String> saveObject = post.getSaveObject();
-    	
-    	boolean objectSaved = IOdevice.savePost(saveObject);
-
-    	if(objectSaved)
-			return redirect("/").addingToSession(request, "logstate", "Success");
-		else
-			return redirect("/").addingToSession(request, "logstate", "Sorry, something went wrong");
+    	Post.save(post);
+    	return redirect("/").addingToSession(request, "logstate", "Success");
+    	// TODO: error message (goes with Post.save() as a bool method)
     }
 
     public Result deletepost(Http.Request request, int id) {
-    	Post.deleteById(id);
+    	Post.deleteById(id); // TODO: catch return boolean
     	return redirect("/");
     }
 }
