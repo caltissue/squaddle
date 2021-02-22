@@ -10,14 +10,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class IOdevice {
 
 	private static final String filepath = "/Users/cal/Desktop/squad-online/squad-online/_db/";
+
+	// TODO: eliminate with db
 	private static final String postPath = "_posts/post-";
-	private static final String postFolderPath = "_posts/"; // TODO - this shit dumb as hell
+	private static final String postFolderPath = "_posts/";
 	private static final String userPath = "_users/user-";
-	private static final String userFolderPath = "_users/"; // TODO - this shit dumb as hell
+	private static final String userFolderPath = "_users/"; 
 
 	public static String getUserPath() { return userPath; }
 	public static String getUserFolderPath() { return userFolderPath; }
-
 	public static String getPostPath() { return postPath; }
 	public static String getPostFolderPath() { return postFolderPath; }
 
